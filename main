@@ -1,206 +1,75 @@
+-- your assignment:
+--   make an app for your favourite type of animal or plant, like "birds" or "native Canadian prickly bushes"
+--   your app's navigation bar must:
+--     1. have a drop-down relevant to the topic, which opens a page on that topic, e.g., aquatic birds with a list of links
+--     2. have two menu bar items which don't have to do anything
+--     3. have a search field, which when non-empty causes a carousel with (creative-commons-licensed) images to be displayed, and underneath that an accordian made up of search results
+--   you must have at least 10 species, which you should list above your share link and code in the avenue submission
+--   Marks: 1% - working drop-down
+--          1% - search field causes update
+--          1% - search field updates properly (ie "b ern" give "Big Bird", "Bert", "Ernie", "ber" -> ["Bert"])
+--          1% - carosel works and has the right content
+--          1% - accordian appears and has the right content
+--          maximum 4% (so you can make some mistakes)
+
+       
+
+import Bootstrap.Form.Input as Input 
+import Html.Events as Events
+
 --this appears at the top of the browser screen (or on the tab)
 title : String
-title = "My Name's Resume"
+title = "Seasame Street Confidential"
 
+blankLine = Grid.row [] --this is an empty row (to add blank space)
+              [ Grid.col []
+                  [ Html.h6[Spacing.my3][] --change spacing number to make empty row bigger or smaller (0-5)
+                  ]
+              ]
+        
 page : Model -> List (Html Msg)
 page model =
-    [ --HEADER
-    Html.h1 [Spacing.mt5, Spacing.mb2, style "color" "maroon"] [ Html.text "Name" ] --https://htmlcolorcodes.com/color-names/ for more colour names (you can also use rgb)
-    , Html.h4 [][Html.text "Additional information"]
-    , Grid.row [Row.attrs [ style "background-color" "rgb(121,19,65)" ]] --draws a line (empty row with rgb colour - you can also use colour names from link above)
-           [ Grid.col []
-               [
-               ]
-            ]
-
-
-    --EXPERIENCE
-    , Html.h2 [Spacing.mt5, Spacing.mb2] [Html.text "Experience"]
-    , Grid.row []
-        [ Grid.col [Col.sm3] --increase number after sm to make this column bigger (range 1-12)
-            [ Html.h5 [ style "font-weight" "bold"][ Html.text "Job title"]
-            ]
-        , Grid.col []
-            [ Html.text "Location"
-            ]
-        , Grid.col [Col.textAlign Text.alignLgRight]
-            [ Html.text "Date"
-            ]
-        ]
-    , Grid.row []
-        [ Grid.col [Col.offsetSm1] --increase number after offsetSm to make the offset bigger (range 0-11)
-            [ Html.text "- Some stuff here (with an offset)"
-            ]
-        ]
-    , Grid.row []
-        [ Grid.col [Col.offsetSm1] --increase number after offsetSm to make the offset bigger (range 0-11)
-            [ Html.text "- Some more stuff (this has an offset too)"
-            ]
-        ]
-    , Grid.row [] --this is an empty row (to add blank space)
-        [ Grid.col []
-            [ Html.h6[Spacing.my3][] --change spacing number to make empty row bigger or smaller (0-5)
-            ]
-        ]
-    , Grid.row []
-        [ Grid.col [Col.sm3] --increase number after sm to make this column bigger (range 1-12)
-            [ Html.h5 [ style "font-weight" "bold"][ Html.text "Job title"]
-            ]
-        , Grid.col []
-            [ Html.text "Location"
-            ]
-        , Grid.col [Col.textAlign Text.alignLgRight]
-            [ Html.text "Date"
-            ]
-        ]
-    , Grid.row []
-        [ Grid.col [Col.offsetSm1] --increase number after offsetSm to make the offset bigger (range 0-11)
-            [ Html.text "- Some stuff here (with an offset)"
-            ]
-        ]
-    , Grid.row []
-        [ Grid.col [Col.offsetSm1] --increase number after offsetSm to make the offset bigger (range 0-11)
-            [ Html.text "- Some more stuff (this has an offset too)"
-            ]
-        ]
-    , Grid.row [] --this is an empty row (to add empty space)
-        [ Grid.col []
-            [ Html.h6[Spacing.my5][] --change spacing number to make empty row bigger or smaller
-            ]
-        ]
-
-
-    --EDUCATION
-    , Html.h2 [Spacing.mt3, Spacing.mb2] [Html.text "Education"]
-    , Grid.row []
-        [ Grid.col [Col.sm8] --increase number after sm to make this column bigger (range 1-12)
-            [ --use 'a [target "_blank", href "link"] [text/picture]' to create a link
-            Html.a [target "_blank", href "https://www.google.ca/"] [Html.h5 [ style "font-weight" "bold"][ Html.text "School Name with link"]]
-            ]
-        , Grid.col [Col.textAlign Text.alignLgRight]
-            [ Html.text "Date"
-            ]
-        ]
-    , Grid.row []
-        [ Grid.col []
-            [ Html.a [target "_blank", href "https://www.google.ca/"] [ Html.text "This is also a link"]]
-        ]
-    , Grid.row []
-        [ Grid.col []
-            [ Html.text "This picture has a link:"
-            , Html.a [target "_blank", href "https://www.google.ca/"] [Html.img [style "width" "150px", src "https://cschank.github.io/img/school.png"] []]
-            ]
-        , Grid.col []
-            [ Html.text "This is just a picture:"
-            , Html.img [style "width" "200px",src "https://cschank.github.io/img/grad-cap.png"] []
-            ]
-        ]
-    , Grid.row [] --this is an empty row (to add empty space)
-        [ Grid.col []
-            [ Html.h6[Spacing.my5][] --change spacing number to make empty row bigger or smaller
-            ]
-        ]
-
-    --ADD ACCORDION - edit what your accordion looks like
-    , Grid.row []
-        [ Grid.col []
-            [ Accordion.config (AccordionMsg 0) -- the ID number of the accordion
-                |> Accordion.withAnimation
-                |> Accordion.cards
-                    [ Accordion.card
-                        { id = "card1" --each accordion card needs an id
-                        , options = []
-                        , header =
-                            Accordion.header [] <| Accordion.toggle [] [ Html.text "Community Involvement" ]
-                        , blocks =
-                            [ Accordion.block []
-                                [ Block.text [] [ Html.text "Text inside card 1" ] ]
-                            ]
-                        }
-                    , Accordion.card
-                        { id = "card2"
-                        , options = []
-                        , header =
-                            Accordion.header [] <| Accordion.toggle [] [ Html.text "Awards and Achievments" ]
-                        , blocks =
-                            [ Accordion.block []
-                                [ Block.text [] [ Html.text "Text inside card 2" ] ]
-                            ]
-                        }
-                    , Accordion.card
-                        { id = "card3"
-                        , options = []
-                        , header =
-                            Accordion.header []
-                                (Accordion.toggle [] [ Html.text " This accordion header has a picture"] )
-                                |> Accordion.prependHeader
-                                    [ Html.img [style "width" "50px",src "img/grad-cap.png"] [] ]
-                        , blocks =
-                            [ Accordion.block []
-                                [ Block.text [] [ Html.text "Text inside card 3" ]
-                                ]
-                            ]
-                        }
+    [ Grid.container [] -- Wrap in a container to center the navbar
+        [ Navbar.config NavbarMsg
+            |> Navbar.withAnimation
+            |> Navbar.collapseMedium            -- Collapse menu at the medium breakpoint
+            |> Navbar.info                      -- Customize coloring
+            |> Navbar.brand                     -- Add logo to your brand with a little styling to align nicely
+                [ href "#" ]
+                [ Html.img
+                    [ src "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Sesame_Street_logo.svg/1024px-Sesame_Street_logo.svg.png"
+                    , class "d-inline-block align-top"
+                    , style  "width" "120px" 
                     ]
-                |> Accordion.view (accordionState 0 {-same id as above-} model.accordionStates)
-            ]
-        ]
-        -- this is a carousel
-        , Html.h2 [] [Html.text "Photo Highlights"]
-        ,Carousel.config (CarouselMsg 0 {-the id number of the Carousel-}) [style "height" "500px"]
-                |> Carousel.slides
-                    [ Slide.config [] (image "500px" "https://c1.staticflickr.com/8/7018/6446600053_14c322b898_b.jpg")
-                    , Slide.config [] (image "500px" "https://cschank.github.io/img/Surfer.jpg")
-                    , Slide.config [] (image "500px" "https://pbs.twimg.com/media/DrRPJPOXgAAJY8R.jpg")
-                    ]
-                |> Carousel.withIndicators
-                |> Carousel.view (carouselState 0 model.carouselStates)
-        -- this is a pop-up
-      , Html.div []
-        [Button.button
-            [ Button.outlineSuccess
-            , Button.attrs [ onClick <| ShowModal 0, style "color" "black" ]
-            ]
-            [ Html.text "Open Pop-Up" ]
-
-        , Modal.config (CloseModal 0)
-            |> Modal.small
-            |> Modal.hideOnBackdropClick True
-            |> Modal.h3 [] [ Html.text "Pop-up header" ]
-            |> Modal.body [] [ Html.p [] [ Html.text "This is a pop-up for you!"] ]
-            |> Modal.footer []
-                [ Button.button
-                    [ Button.outlinePrimary
-                    , Button.attrs [ onClick (CloseModal 0), style "color" "blue" ]
-                    ]
-                    [ Html.text "Close" ]
+                    []
                 ]
-            |> Modal.view (modalVisibility 0 model.modalVisibilities)
-        ]
-        , Html.div []
-        [Button.button
-            [ Button.outlineSuccess
-            , Button.attrs [ onClick <| ShowModal 1, style "color" "black" ]
-            ]
-            [ Html.text "Open Another Pop-Up" ]
-
-        --To add another pop-up, you must increase the numPopUps, and include a unique id for each one
-        , Modal.config (CloseModal 1)
-            |> Modal.small
-            |> Modal.hideOnBackdropClick True
-            |> Modal.h3 [] [ Html.text "Pop-up header" ]
-            |> Modal.body [] [ Html.p [] [ Html.text "This is another pop-up for you!"] ]
-            |> Modal.footer []
-                [ Button.button
-                    [ Button.outlinePrimary
-                    , Button.attrs [ onClick (CloseModal 1), style "color" "blue" ]
-                    ]
-                    [ Html.text "Close" ]
+            |> Navbar.items
+                [ Navbar.itemLink
+                    [ href "#" ] [ Html.text "Seasame Street Confidential" ]
+                , Navbar.dropdown        
+                    { id = "mydropdown"
+                    , toggle = Navbar.dropdownToggle [] [ Html.text "Seasons" ]
+                    , items =
+                        List.map  ( \ year -> Navbar.dropdownItem
+                                      [ href "#" ]
+                                      [ String.fromInt year |> Html.text ]
+                                  )
+                               ( List.range 1969 2021 )
+                    }
                 ]
-            |> Modal.view (modalVisibility 1 model.modalVisibilities)
+            |> Navbar.customItems
+                [ Navbar.formItem []
+                    [ Input.text [ Input.attrs [placeholder "character search", value model.searchString, Events.onInput UpdateSearch ]]
+                    ]
+                ]
+            |> Navbar.view model.navbarState
         ]
-
-    ]
+     --HEADER
+    , Html.text model.searchString
+    , Html.div [] []
+    ] 
+    ++
+    ( List.map (\ wrd -> Html.text (wrd ++ ", ")) model.searchList )
 
 {- The number of accordions, carousels and pop ups.
    To add more than one of each, you must increase these numbers and then make sure to
@@ -211,24 +80,17 @@ numAccordions = 1
 numCarousels = 2
 numPopUps = 1
 
-                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
-                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
-                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
-                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
-                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
-                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
-                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
-
-
 
 type alias Model =
     { navKey : Navigation.Key
     , page : Page
     , time : Float
-    , navState : Navbar.State
+    , navbarState : Navbar.State
     , accordionStates : Dict Int Accordion.State --ADD ACCORDION
     , carouselStates : Dict Int Carousel.State -- ADD CAROUSEL
     , modalVisibilities : Dict Int Modal.Visibility -- ADD MODAL
+    , searchString : String
+    , searchList : List String
     }
 
 type Page
@@ -239,29 +101,32 @@ type Page
 type Msg
     = UrlChange Url
     | ClickedLink UrlRequest
-    | NavMsg Navbar.State
+    | NavbarMsg Navbar.State
     | NoOp
     | AccordionMsg Int Accordion.State --ADD ACCORDION
     | CarouselMsg Int Carousel.Msg --ADD CAROUSEL
     | CloseModal Int
     | ShowModal Int
     | Tick Float
+    | UpdateSearch String
 
 init : Flags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
-        ( navState, navCmd ) =
-            Navbar.initialState NavMsg
+        ( navbarState, navCmd ) =
+            Navbar.initialState NavbarMsg
 
         ( model, urlCmd ) =
             urlUpdate url { navKey = key
-                          , navState = navState
+                          , navbarState = navbarState
                           , page = Home
                           , time = 0
                           , accordionStates = Dict.fromList <| List.map (\n -> (n,Accordion.initialStateCardOpen "")) (List.range 0 (numAccordions-1)) --ADD ACCORDION - what does accordion look like when you open the page?
                             --Accordion.initialStateCardOpen "card1" -- if you put a card id, the accordion starts with that card open
                           , carouselStates = Dict.fromList <| List.map (\n -> (n,Carousel.initialState)) (List.range 0 (numCarousels-1))
                           , modalVisibilities = Dict.fromList <| List.map (\n -> (n,Modal.hidden)) (List.range 0 (numPopUps-1))
+                          , searchString = ""
+                          , searchList = []
                           }
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
@@ -271,11 +136,11 @@ init flags url key =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     --ADD ACCORDION - now that there are multiple subscriptions, they need to be grouped in Sub.batch
-    Sub.batch [Navbar.subscriptions model.navState NavMsg
-    , Sub.batch <| List.map (\(n, s) -> Accordion.subscriptions s (AccordionMsg n)) <| Dict.toList model.accordionStates
-    , Sub.batch <| List.map (\(n, s) -> Carousel.subscriptions s (CarouselMsg n)) <| Dict.toList model.carouselStates
-    , onAnimationFrame ( \ posix -> Tick ((Time.posixToMillis posix |> toFloat) * 0.001) )
-    ]
+    Sub.batch [Navbar.subscriptions model.navbarState NavbarMsg
+              , Sub.batch <| List.map (\(n, s) -> Accordion.subscriptions s (AccordionMsg n)) <| Dict.toList model.accordionStates
+              , Sub.batch <| List.map (\(n, s) -> Carousel.subscriptions s (CarouselMsg n)) <| Dict.toList model.carouselStates
+              , onAnimationFrame ( \ posix -> Tick ((Time.posixToMillis posix |> toFloat) * 0.001) )
+              ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -293,8 +158,8 @@ update msg model =
         UrlChange url ->
             urlUpdate url model
 
-        NavMsg state ->
-            ( { model | navState = state }
+        NavbarMsg state ->
+            ( { model | navbarState = state }
             , Cmd.none
             )
 
@@ -326,6 +191,57 @@ update msg model =
             ( { model | modalVisibilities = Dict.insert id Modal.shown model.modalVisibilities } , Cmd.none )
 
         Tick t -> ({ model | time = t }, Cmd.none)
+        
+        UpdateSearch str ->
+                        let searchString = String.filter filterChars str
+                            listWords = (String.split " " (String.toLower searchString))
+                            firstList = List.take ((List.length listWords)-1) listWords
+                            lastList = List.drop ((List.length listWords)-1) listWords
+                            searchList = (List.filter commonWrds firstList)++lastList --filter out common words only from fully typed keyword
+                        in
+                        ({ model | searchString = searchString
+                                 , searchList = searchList
+                                --, searching = True
+                                --, searchBeginT = if model.searching then model.searchBeginT else model.t
+                                --, searchContinuesT = model.t
+                                --, menuState = Closed
+                        }, Cmd.none )
+
+filterChars char = if Char.isLower char || Char.isUpper char || Char.isDigit char || char == ' ' then True else False
+
+commonWrds wrd = case wrd of
+                  "the" -> False
+                  "best" -> False
+                  "with" -> False
+                  "about" -> False
+                  "and" -> False
+                  "as" -> False
+                  "at" -> False
+                  "a" -> False
+                  "to" -> False
+                  "in" -> False
+                  "by" -> False
+                  "on" -> False
+                  "for" -> False
+                  "from" -> False
+                  "greatest" -> False
+                  "ever" -> False
+                  "school" -> False
+                  "grade" -> False
+                  "catholic" -> False
+                  "public" -> False
+                  "junior" -> False
+                  "senior" -> False
+                  "elementary" -> False
+                  "secondary" -> False
+                  "district" -> False
+                  "" -> False
+                  _ -> True
+
+resetViewport : Cmd Msg
+resetViewport =
+  Task.perform (\_ -> NoOp) (Dom.setViewport 0 0)
+
 
 urlUpdate : Url -> Model -> ( Model, Cmd Msg )
 urlUpdate url model =
@@ -335,10 +251,6 @@ urlUpdate url model =
 
         Just route ->
             ( { model | page = route }, resetViewport )
-
-resetViewport : Cmd Msg
-resetViewport =
-  Task.perform (\_ -> NoOp) (Dom.setViewport 0 0)
 
 decode : Url -> Maybe Page
 decode url =
@@ -367,10 +279,6 @@ view model =
         ,  Html.div []
             [ mainContent model
             ]
-        ,  Html.div [style "width" "25%"] -- change the width of the icon
-            [
-               
-            ]
         ]
     }
 
@@ -390,4 +298,6 @@ pageNotFound =
     [ Html.h1 [Spacing.my4] [ Html.text "Not found" ]
     , Html.text "Sorry, couldn't find that page"
     ]
+
+
 

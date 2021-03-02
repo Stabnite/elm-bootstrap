@@ -1,0 +1,393 @@
+--this appears at the top of the browser screen (or on the tab)
+title : String
+title = "My Name's Resume"
+
+page : Model -> List (Html Msg)
+page model =
+    [ --HEADER
+    Html.h1 [Spacing.mt5, Spacing.mb2, style "color" "maroon"] [ Html.text "Name" ] --https://htmlcolorcodes.com/color-names/ for more colour names (you can also use rgb)
+    , Html.h4 [][Html.text "Additional information"]
+    , Grid.row [Row.attrs [ style "background-color" "rgb(121,19,65)" ]] --draws a line (empty row with rgb colour - you can also use colour names from link above)
+           [ Grid.col []
+               [
+               ]
+            ]
+
+
+    --EXPERIENCE
+    , Html.h2 [Spacing.mt5, Spacing.mb2] [Html.text "Experience"]
+    , Grid.row []
+        [ Grid.col [Col.sm3] --increase number after sm to make this column bigger (range 1-12)
+            [ Html.h5 [ style "font-weight" "bold"][ Html.text "Job title"]
+            ]
+        , Grid.col []
+            [ Html.text "Location"
+            ]
+        , Grid.col [Col.textAlign Text.alignLgRight]
+            [ Html.text "Date"
+            ]
+        ]
+    , Grid.row []
+        [ Grid.col [Col.offsetSm1] --increase number after offsetSm to make the offset bigger (range 0-11)
+            [ Html.text "- Some stuff here (with an offset)"
+            ]
+        ]
+    , Grid.row []
+        [ Grid.col [Col.offsetSm1] --increase number after offsetSm to make the offset bigger (range 0-11)
+            [ Html.text "- Some more stuff (this has an offset too)"
+            ]
+        ]
+    , Grid.row [] --this is an empty row (to add blank space)
+        [ Grid.col []
+            [ Html.h6[Spacing.my3][] --change spacing number to make empty row bigger or smaller (0-5)
+            ]
+        ]
+    , Grid.row []
+        [ Grid.col [Col.sm3] --increase number after sm to make this column bigger (range 1-12)
+            [ Html.h5 [ style "font-weight" "bold"][ Html.text "Job title"]
+            ]
+        , Grid.col []
+            [ Html.text "Location"
+            ]
+        , Grid.col [Col.textAlign Text.alignLgRight]
+            [ Html.text "Date"
+            ]
+        ]
+    , Grid.row []
+        [ Grid.col [Col.offsetSm1] --increase number after offsetSm to make the offset bigger (range 0-11)
+            [ Html.text "- Some stuff here (with an offset)"
+            ]
+        ]
+    , Grid.row []
+        [ Grid.col [Col.offsetSm1] --increase number after offsetSm to make the offset bigger (range 0-11)
+            [ Html.text "- Some more stuff (this has an offset too)"
+            ]
+        ]
+    , Grid.row [] --this is an empty row (to add empty space)
+        [ Grid.col []
+            [ Html.h6[Spacing.my5][] --change spacing number to make empty row bigger or smaller
+            ]
+        ]
+
+
+    --EDUCATION
+    , Html.h2 [Spacing.mt3, Spacing.mb2] [Html.text "Education"]
+    , Grid.row []
+        [ Grid.col [Col.sm8] --increase number after sm to make this column bigger (range 1-12)
+            [ --use 'a [target "_blank", href "link"] [text/picture]' to create a link
+            Html.a [target "_blank", href "https://www.google.ca/"] [Html.h5 [ style "font-weight" "bold"][ Html.text "School Name with link"]]
+            ]
+        , Grid.col [Col.textAlign Text.alignLgRight]
+            [ Html.text "Date"
+            ]
+        ]
+    , Grid.row []
+        [ Grid.col []
+            [ Html.a [target "_blank", href "https://www.google.ca/"] [ Html.text "This is also a link"]]
+        ]
+    , Grid.row []
+        [ Grid.col []
+            [ Html.text "This picture has a link:"
+            , Html.a [target "_blank", href "https://www.google.ca/"] [Html.img [style "width" "150px", src "https://cschank.github.io/img/school.png"] []]
+            ]
+        , Grid.col []
+            [ Html.text "This is just a picture:"
+            , Html.img [style "width" "200px",src "https://cschank.github.io/img/grad-cap.png"] []
+            ]
+        ]
+    , Grid.row [] --this is an empty row (to add empty space)
+        [ Grid.col []
+            [ Html.h6[Spacing.my5][] --change spacing number to make empty row bigger or smaller
+            ]
+        ]
+
+    --ADD ACCORDION - edit what your accordion looks like
+    , Grid.row []
+        [ Grid.col []
+            [ Accordion.config (AccordionMsg 0) -- the ID number of the accordion
+                |> Accordion.withAnimation
+                |> Accordion.cards
+                    [ Accordion.card
+                        { id = "card1" --each accordion card needs an id
+                        , options = []
+                        , header =
+                            Accordion.header [] <| Accordion.toggle [] [ Html.text "Community Involvement" ]
+                        , blocks =
+                            [ Accordion.block []
+                                [ Block.text [] [ Html.text "Text inside card 1" ] ]
+                            ]
+                        }
+                    , Accordion.card
+                        { id = "card2"
+                        , options = []
+                        , header =
+                            Accordion.header [] <| Accordion.toggle [] [ Html.text "Awards and Achievments" ]
+                        , blocks =
+                            [ Accordion.block []
+                                [ Block.text [] [ Html.text "Text inside card 2" ] ]
+                            ]
+                        }
+                    , Accordion.card
+                        { id = "card3"
+                        , options = []
+                        , header =
+                            Accordion.header []
+                                (Accordion.toggle [] [ Html.text " This accordion header has a picture"] )
+                                |> Accordion.prependHeader
+                                    [ Html.img [style "width" "50px",src "img/grad-cap.png"] [] ]
+                        , blocks =
+                            [ Accordion.block []
+                                [ Block.text [] [ Html.text "Text inside card 3" ]
+                                ]
+                            ]
+                        }
+                    ]
+                |> Accordion.view (accordionState 0 {-same id as above-} model.accordionStates)
+            ]
+        ]
+        -- this is a carousel
+        , Html.h2 [] [Html.text "Photo Highlights"]
+        ,Carousel.config (CarouselMsg 0 {-the id number of the Carousel-}) [style "height" "500px"]
+                |> Carousel.slides
+                    [ Slide.config [] (image "500px" "https://c1.staticflickr.com/8/7018/6446600053_14c322b898_b.jpg")
+                    , Slide.config [] (image "500px" "https://cschank.github.io/img/Surfer.jpg")
+                    , Slide.config [] (image "500px" "https://pbs.twimg.com/media/DrRPJPOXgAAJY8R.jpg")
+                    ]
+                |> Carousel.withIndicators
+                |> Carousel.view (carouselState 0 model.carouselStates)
+        -- this is a pop-up
+      , Html.div []
+        [Button.button
+            [ Button.outlineSuccess
+            , Button.attrs [ onClick <| ShowModal 0, style "color" "black" ]
+            ]
+            [ Html.text "Open Pop-Up" ]
+
+        , Modal.config (CloseModal 0)
+            |> Modal.small
+            |> Modal.hideOnBackdropClick True
+            |> Modal.h3 [] [ Html.text "Pop-up header" ]
+            |> Modal.body [] [ Html.p [] [ Html.text "This is a pop-up for you!"] ]
+            |> Modal.footer []
+                [ Button.button
+                    [ Button.outlinePrimary
+                    , Button.attrs [ onClick (CloseModal 0), style "color" "blue" ]
+                    ]
+                    [ Html.text "Close" ]
+                ]
+            |> Modal.view (modalVisibility 0 model.modalVisibilities)
+        ]
+        , Html.div []
+        [Button.button
+            [ Button.outlineSuccess
+            , Button.attrs [ onClick <| ShowModal 1, style "color" "black" ]
+            ]
+            [ Html.text "Open Another Pop-Up" ]
+
+        --To add another pop-up, you must increase the numPopUps, and include a unique id for each one
+        , Modal.config (CloseModal 1)
+            |> Modal.small
+            |> Modal.hideOnBackdropClick True
+            |> Modal.h3 [] [ Html.text "Pop-up header" ]
+            |> Modal.body [] [ Html.p [] [ Html.text "This is another pop-up for you!"] ]
+            |> Modal.footer []
+                [ Button.button
+                    [ Button.outlinePrimary
+                    , Button.attrs [ onClick (CloseModal 1), style "color" "blue" ]
+                    ]
+                    [ Html.text "Close" ]
+                ]
+            |> Modal.view (modalVisibility 1 model.modalVisibilities)
+        ]
+
+    ]
+
+{- The number of accordions, carousels and pop ups.
+   To add more than one of each, you must increase these numbers and then make sure to
+   put the correct id in the code where you add it. The ids start at 0 and go up from there
+   (0, 1, 2, 3, etc.)
+-}
+numAccordions = 1
+numCarousels = 2
+numPopUps = 1
+
+                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
+                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
+                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
+                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
+                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
+                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
+                -- FOR NORMAL WEB PAGES YOU DO NOT EDIT BELOW HERE --
+
+
+
+type alias Model =
+    { navKey : Navigation.Key
+    , page : Page
+    , time : Float
+    , navState : Navbar.State
+    , accordionStates : Dict Int Accordion.State --ADD ACCORDION
+    , carouselStates : Dict Int Carousel.State -- ADD CAROUSEL
+    , modalVisibilities : Dict Int Modal.Visibility -- ADD MODAL
+    }
+
+type Page
+    = Home
+    | NotFound
+
+
+type Msg
+    = UrlChange Url
+    | ClickedLink UrlRequest
+    | NavMsg Navbar.State
+    | NoOp
+    | AccordionMsg Int Accordion.State --ADD ACCORDION
+    | CarouselMsg Int Carousel.Msg --ADD CAROUSEL
+    | CloseModal Int
+    | ShowModal Int
+    | Tick Float
+
+init : Flags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
+init flags url key =
+    let
+        ( navState, navCmd ) =
+            Navbar.initialState NavMsg
+
+        ( model, urlCmd ) =
+            urlUpdate url { navKey = key
+                          , navState = navState
+                          , page = Home
+                          , time = 0
+                          , accordionStates = Dict.fromList <| List.map (\n -> (n,Accordion.initialStateCardOpen "")) (List.range 0 (numAccordions-1)) --ADD ACCORDION - what does accordion look like when you open the page?
+                            --Accordion.initialStateCardOpen "card1" -- if you put a card id, the accordion starts with that card open
+                          , carouselStates = Dict.fromList <| List.map (\n -> (n,Carousel.initialState)) (List.range 0 (numCarousels-1))
+                          , modalVisibilities = Dict.fromList <| List.map (\n -> (n,Modal.hidden)) (List.range 0 (numPopUps-1))
+                          }
+    in
+        ( model, Cmd.batch [ urlCmd, navCmd ] )
+
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    --ADD ACCORDION - now that there are multiple subscriptions, they need to be grouped in Sub.batch
+    Sub.batch [Navbar.subscriptions model.navState NavMsg
+    , Sub.batch <| List.map (\(n, s) -> Accordion.subscriptions s (AccordionMsg n)) <| Dict.toList model.accordionStates
+    , Sub.batch <| List.map (\(n, s) -> Carousel.subscriptions s (CarouselMsg n)) <| Dict.toList model.carouselStates
+    , onAnimationFrame ( \ posix -> Tick ((Time.posixToMillis posix |> toFloat) * 0.001) )
+    ]
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        ClickedLink req ->
+             case req of
+                 Browser.Internal url ->
+                     ( model, Navigation.pushUrl model.navKey <| Url.toString url )
+
+                 Browser.External href ->
+                     ( model, Navigation.load href )
+
+
+        UrlChange url ->
+            urlUpdate url model
+
+        NavMsg state ->
+            ( { model | navState = state }
+            , Cmd.none
+            )
+
+        NoOp -> (model, Cmd.none)
+
+        --ADD ACCORDION
+        AccordionMsg id state ->
+            ( { model | accordionStates = Dict.insert id state model.accordionStates }
+            , Cmd.none
+            )
+
+        --ADD CAROUSEL
+        CarouselMsg id cMsg ->
+            ( {model | carouselStates = Dict.update id
+                                            (\m -> case m of
+                                                    Just s -> Just <| Carousel.update cMsg s
+                                                    Nothing -> Nothing
+                                            ) model.carouselStates
+
+             }
+            , Cmd.none
+            )
+
+        --ADD MODAL
+        CloseModal id ->
+            ( { model | modalVisibilities = Dict.insert id Modal.hidden model.modalVisibilities } , Cmd.none )
+
+        ShowModal id ->
+            ( { model | modalVisibilities = Dict.insert id Modal.shown model.modalVisibilities } , Cmd.none )
+
+        Tick t -> ({ model | time = t }, Cmd.none)
+
+urlUpdate : Url -> Model -> ( Model, Cmd Msg )
+urlUpdate url model =
+    case decode url of
+        Nothing ->
+            ( { model | page = NotFound }, resetViewport )
+
+        Just route ->
+            ( { model | page = route }, resetViewport )
+
+resetViewport : Cmd Msg
+resetViewport =
+  Task.perform (\_ -> NoOp) (Dom.setViewport 0 0)
+
+decode : Url -> Maybe Page
+decode url =
+    { url | path = Maybe.withDefault "" url.fragment, fragment = Nothing }
+    |> UrlParser.parse routeParser
+
+routeParser : Parser (Page -> a) a
+routeParser =
+    UrlParser.oneOf
+        [ UrlParser.map Home top
+        ]
+
+
+view : Model -> Browser.Document Msg
+view model =
+    { title = case model.page of
+          Home ->
+            title
+
+          NotFound ->
+              "Page Not Found"
+    , body =
+        [
+          Html.node "link" [attribute "rel" "stylesheet", href "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"] []
+        , Html.node "link" [attribute "rel" "stylesheet", href "https://documents.mcmaster.ca/www/cdn/css/1.0/mcm-bw.css"] []
+        ,  Html.div []
+            [ mainContent model
+            ]
+        ,  Html.div [style "width" "25%"] -- change the width of the icon
+            [
+               
+            ]
+        ]
+    }
+
+mainContent : Model -> Html Msg
+mainContent model =
+    Grid.container [] <|
+        case model.page of
+            Home ->
+                page model
+
+            NotFound ->
+                pageNotFound
+
+
+pageNotFound : List (Html Msg)
+pageNotFound =
+    [ Html.h1 [Spacing.my4] [ Html.text "Not found" ]
+    , Html.text "Sorry, couldn't find that page"
+    ]
+

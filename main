@@ -1,3 +1,4 @@
+     
 -- your assignment:
 --   make an app for your favourite type of animal or plant, like "birds" or "native Canadian prickly bushes"
 --   your app's navigation bar must:
@@ -11,22 +12,80 @@
 --          1% - carosel works and has the right content
 --          1% - accordian appears and has the right content
 --          maximum 4% (so you can make some mistakes)
-
-       
-
+ 
+ 
+ 
 import Bootstrap.Form.Input as Input 
 import Html.Events as Events
+import Bootstrap.Carousel as Carousel
+import Bootstrap.Carousel.Slide as Slide
+import Bootstrap.Accordion as Accordion
+import Bootstrap.Card as Card
+import Bootstrap.Card.Block as Block
 
 --this appears at the top of the browser screen (or on the tab)
 title : String
 title = "Seasame Street Confidential"
+ 
+-- list of 15 most popular Ontario birds with name (common name, and scientific name) , url, and image
+birds : List ((String, String), String, String)
+birds = [ (("Common loon","Gavia immer"),"https://en.wikipedia.org/wiki/Common_loon","https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg/220px-Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg")
+        , (("Black-bellied whistling duck","Dendrocygna autumnalis"),"https://en.wikipedia.org/wiki/Black-bellied_whistling_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Whistling_duck_flight02_-_natures_pics-edit1.jpg/220px-Whistling_duck_flight02_-_natures_pics-edit1.jpg")
+        , (("Fulvous whistling duck","Dendrocygna bicolor"),"https://en.wikipedia.org/wiki/Fulvous_whistling_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Dendrocygna_bicolor_wilhelma.jpg/220px-Dendrocygna_bicolor_wilhelma.jpg")
+        , (("Snow goose","Anser caerulescens"),"https://en.wikipedia.org/wiki/Snow_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Snow_goose_in_Central_Park_%2833138%29.jpg/220px-Snow_goose_in_Central_Park_%2833138%29.jpg")
+        , (("Ross's goose","Anser rossii"),"https://en.wikipedia.org/wiki/Ross%27s_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Ross%27s_Goose_%28Chen_rossii%29_%2823321411711%29.jpg/220px-Ross%27s_Goose_%28Chen_rossii%29_%2823321411711%29.jpg")
+        , (("Greater white-fronted goose","Anser albifrons"),"https://en.wikipedia.org/wiki/Greater_white-fronted_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Greater_white-fronted_goose_%28cropped%29.jpg/220px-Greater_white-fronted_goose_%28cropped%29.jpg")
+        , (("Pink-footed goose","(Anser brachyrhynchus"),"https://en.wikipedia.org/wiki/Pink-footed_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Anser_brachyrhynchus.jpg/220px-Anser_brachyrhynchus.jpg")
+        , (("Brant (goose)","Branta bernicla"),"https://en.wikipedia.org/wiki/Brant_(goose)","https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Brent_Goose.jpg/220px-Brent_Goose.jpg")
+        , (("Barnacle goose","Branta leucopsis"),"https://en.wikipedia.org/wiki/Barnacle_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Barnacle-Goose.jpg/220px-Barnacle-Goose.jpg")
+        , (("Cackling goose","Branta hutchinsii"),"https://en.wikipedia.org/wiki/Cackling_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/AleutianCanadaGoose2.jpg/220px-AleutianCanadaGoose2.jpg")
+        , (("Canada goose","Branta canadensis"),"https://en.wikipedia.org/wiki/Canada_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Canada_goose_on_Seedskadee_NWR_%2827826185489%29.jpg/220px-Canada_goose_on_Seedskadee_NWR_%2827826185489%29.jpg")
+        , (("Mute swan","Cygnus olor"),"https://en.wikipedia.org/wiki/Mute_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Mute_swan_Vrhnika.jpg/220px-Mute_swan_Vrhnika.jpg")
+        , (("Trumpeter swan","Cygnus buccinator"),"https://en.wikipedia.org/wiki/Trumpeter_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Trumpeter_swans_in_winter.jpg/220px-Trumpeter_swans_in_winter.jpg")
+        , (("Tundra swan","Cygnus columbianus"),"https://en.wikipedia.org/wiki/Tundra_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Cygnus_bewickii_01.jpg/220px-Cygnus_bewickii_01.jpg")
+        , (("Wood duck","Aix sponsa"),"https://en.wikipedia.org/wiki/Wood_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wood_Duck_%28Aix_sponsa%29%2C_Parc_du_Rouge-Clo%C3%AEtre%2C_Brussels.jpg/220px-Wood_Duck_%28Aix_sponsa%29%2C_Parc_du_Rouge-Clo%C3%AEtre%2C_Brussels.jpg") ]
 
+
+carousel1 model =
+  Carousel.config CarouselMsg  []
+    |> Carousel.withControls
+    |> Carousel.withIndicators
+    |> Carousel.slides
+       (birds |> List.map (\((birdName,birdSpecies),birdUrl,birdImage) ->             
+                Slide.config [] (Slide.image [height 300] birdImage)
+                    |> Slide.caption []
+                        [ Html.h4 [] [Html.text birdName]
+                        , Html.p [] [Html.text "Subtitle for slide 1"]
+                        ])  
+       )
+    |> Carousel.view model.carousel1State
+   
+accordion1 model =
+  Accordion.config AccordionMsg
+    |> Accordion.withAnimation
+    |> Accordion.cards
+        (birds |> List.map (\((birdName,birdSpecies),birdUrl,birdImage) ->
+                      Accordion.card
+                          { id = birdName
+                          , options = [ Card.outlineSuccess, Card.align Text.alignXsCenter ]
+                          , header =
+                              Accordion.headerH3 []
+                                  (Accordion.toggle [] [ Html.text birdName ])
+                          , blocks =
+                              [ Accordion.block [ Block.align Text.alignXsLeft ]
+                                  [ Block.titleH4 [] [ Html.text birdSpecies ]
+                                  , Block.text [] [ Html.text "Lorem ipsum etc" ] ]
+                              ]
+                          })
+        )
+    |> Accordion.view model.accordion1State
+    
 blankLine = Grid.row [] --this is an empty row (to add blank space)
               [ Grid.col []
                   [ Html.h6[Spacing.my3][] --change spacing number to make empty row bigger or smaller (0-5)
                   ]
               ]
-        
+ 
 page : Model -> List (Html Msg)
 page model =
     [ Grid.container [] -- Wrap in a container to center the navbar
@@ -48,13 +107,13 @@ page model =
                     [ href "#" ] [ Html.text "Seasame Street Confidential" ]
                 , Navbar.dropdown        
                     { id = "mydropdown"
-                    , toggle = Navbar.dropdownToggle [] [ Html.text "Seasons" ]
+                    , toggle = Navbar.dropdownToggle [] [ Html.text "Birds" ]
                     , items =
-                        List.map  ( \ year -> Navbar.dropdownItem
-                                      [ href "#" ]
-                                      [ String.fromInt year |> Html.text ]
+                        List.map  ( \ ((birdName,_),url,_) -> Navbar.dropdownItem
+                                      [ href url ]
+                                      [ birdName |> Html.text ]
                                   )
-                               ( List.range 1969 2021 )
+                               ( birds )
                     }
                 ]
             |> Navbar.customItems
@@ -66,11 +125,17 @@ page model =
         ]
      --HEADER
     , Html.text model.searchString
+    , case model.searchString of
+        --"" -> Html.div [] [] 
+        _ -> Grid.container [] [ carousel1 model
+                               , accordion1 model]
+    , Html.div [] []
+    , model.accordion1State |> Debug.toString |> Html.text 
     , Html.div [] []
     ] 
     ++
     ( List.map (\ wrd -> Html.text (wrd ++ ", ")) model.searchList )
-
+ 
 {- The number of accordions, carousels and pop ups.
    To add more than one of each, you must increase these numbers and then make sure to
    put the correct id in the code where you add it. The ids start at 0 and go up from there
@@ -79,70 +144,70 @@ page model =
 numAccordions = 1
 numCarousels = 2
 numPopUps = 1
-
-
+ 
+ 
 type alias Model =
     { navKey : Navigation.Key
     , page : Page
     , time : Float
     , navbarState : Navbar.State
-    , accordionStates : Dict Int Accordion.State --ADD ACCORDION
-    , carouselStates : Dict Int Carousel.State -- ADD CAROUSEL
+    , accordion1State : Accordion.State --ADD ACCORDION
+    , carousel1State : Carousel.State -- ADD CAROUSEL
     , modalVisibilities : Dict Int Modal.Visibility -- ADD MODAL
     , searchString : String
     , searchList : List String
     }
-
+ 
 type Page
     = Home
     | NotFound
-
-
+ 
+ 
 type Msg
     = UrlChange Url
     | ClickedLink UrlRequest
     | NavbarMsg Navbar.State
     | NoOp
-    | AccordionMsg Int Accordion.State --ADD ACCORDION
-    | CarouselMsg Int Carousel.Msg --ADD CAROUSEL
+    | AccordionMsg Accordion.State --ADD ACCORDION
+    | CarouselMsg Carousel.Msg --ADD CAROUSEL
     | CloseModal Int
     | ShowModal Int
     | Tick Float
     | UpdateSearch String
-
+ 
 init : Flags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
         ( navbarState, navCmd ) =
             Navbar.initialState NavbarMsg
-
+ 
         ( model, urlCmd ) =
             urlUpdate url { navKey = key
                           , navbarState = navbarState
                           , page = Home
                           , time = 0
-                          , accordionStates = Dict.fromList <| List.map (\n -> (n,Accordion.initialStateCardOpen "")) (List.range 0 (numAccordions-1)) --ADD ACCORDION - what does accordion look like when you open the page?
+                          , accordion1State = Accordion.initialState --ADD ACCORDION - what does accordion look like when you open the page?
                             --Accordion.initialStateCardOpen "card1" -- if you put a card id, the accordion starts with that card open
-                          , carouselStates = Dict.fromList <| List.map (\n -> (n,Carousel.initialState)) (List.range 0 (numCarousels-1))
+                          , carousel1State = Carousel.initialState
                           , modalVisibilities = Dict.fromList <| List.map (\n -> (n,Modal.hidden)) (List.range 0 (numPopUps-1))
                           , searchString = ""
                           , searchList = []
                           }
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
-
-
-
+ 
+ 
+ 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     --ADD ACCORDION - now that there are multiple subscriptions, they need to be grouped in Sub.batch
     Sub.batch [Navbar.subscriptions model.navbarState NavbarMsg
-              , Sub.batch <| List.map (\(n, s) -> Accordion.subscriptions s (AccordionMsg n)) <| Dict.toList model.accordionStates
-              , Sub.batch <| List.map (\(n, s) -> Carousel.subscriptions s (CarouselMsg n)) <| Dict.toList model.carouselStates
+              , Accordion.subscriptions model.accordion1State AccordionMsg
+              , Carousel.subscriptions model.carousel1State CarouselMsg
               , onAnimationFrame ( \ posix -> Tick ((Time.posixToMillis posix |> toFloat) * 0.001) )
               ]
-
-
+ 
+ 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -150,48 +215,42 @@ update msg model =
              case req of
                  Browser.Internal url ->
                      ( model, Navigation.pushUrl model.navKey <| Url.toString url )
-
+ 
                  Browser.External href ->
                      ( model, Navigation.load href )
-
-
+ 
+ 
         UrlChange url ->
             urlUpdate url model
-
+ 
         NavbarMsg state ->
             ( { model | navbarState = state }
             , Cmd.none
             )
-
+ 
         NoOp -> (model, Cmd.none)
-
+ 
         --ADD ACCORDION
-        AccordionMsg id state ->
-            ( { model | accordionStates = Dict.insert id state model.accordionStates }
+        AccordionMsg state ->
+            ( { model | accordion1State = state }
             , Cmd.none
             )
-
+ 
         --ADD CAROUSEL
-        CarouselMsg id cMsg ->
-            ( {model | carouselStates = Dict.update id
-                                            (\m -> case m of
-                                                    Just s -> Just <| Carousel.update cMsg s
-                                                    Nothing -> Nothing
-                                            ) model.carouselStates
-
-             }
+        CarouselMsg subMsg ->
+            ( { model | carousel1State = Carousel.update subMsg model.carousel1State }
             , Cmd.none
             )
-
+ 
         --ADD MODAL
         CloseModal id ->
             ( { model | modalVisibilities = Dict.insert id Modal.hidden model.modalVisibilities } , Cmd.none )
-
+ 
         ShowModal id ->
             ( { model | modalVisibilities = Dict.insert id Modal.shown model.modalVisibilities } , Cmd.none )
-
+ 
         Tick t -> ({ model | time = t }, Cmd.none)
-        
+ 
         UpdateSearch str ->
                         let searchString = String.filter filterChars str
                             listWords = (String.split " " (String.toLower searchString))
@@ -206,9 +265,9 @@ update msg model =
                                 --, searchContinuesT = model.t
                                 --, menuState = Closed
                         }, Cmd.none )
-
+ 
 filterChars char = if Char.isLower char || Char.isUpper char || Char.isDigit char || char == ' ' then True else False
-
+ 
 commonWrds wrd = case wrd of
                   "the" -> False
                   "best" -> False
@@ -237,39 +296,39 @@ commonWrds wrd = case wrd of
                   "district" -> False
                   "" -> False
                   _ -> True
-
+ 
 resetViewport : Cmd Msg
 resetViewport =
   Task.perform (\_ -> NoOp) (Dom.setViewport 0 0)
-
-
+ 
+ 
 urlUpdate : Url -> Model -> ( Model, Cmd Msg )
 urlUpdate url model =
     case decode url of
         Nothing ->
             ( { model | page = NotFound }, resetViewport )
-
+ 
         Just route ->
             ( { model | page = route }, resetViewport )
-
+ 
 decode : Url -> Maybe Page
 decode url =
     { url | path = Maybe.withDefault "" url.fragment, fragment = Nothing }
     |> UrlParser.parse routeParser
-
+ 
 routeParser : Parser (Page -> a) a
 routeParser =
     UrlParser.oneOf
         [ UrlParser.map Home top
         ]
-
-
+ 
+ 
 view : Model -> Browser.Document Msg
 view model =
     { title = case model.page of
           Home ->
             title
-
+ 
           NotFound ->
               "Page Not Found"
     , body =
@@ -281,23 +340,22 @@ view model =
             ]
         ]
     }
-
+ 
 mainContent : Model -> Html Msg
 mainContent model =
     Grid.container [] <|
         case model.page of
             Home ->
                 page model
-
+ 
             NotFound ->
                 pageNotFound
-
-
+ 
+ 
 pageNotFound : List (Html Msg)
 pageNotFound =
     [ Html.h1 [Spacing.my4] [ Html.text "Not found" ]
     , Html.text "Sorry, couldn't find that page"
     ]
-
-
-
+ 
+ 

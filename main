@@ -1,4 +1,24 @@
-     
+{-              GROUP 5       
+   BIRDS:
+1. Common loon  --  https://en.wikipedia.org/wiki/Common_loon
+2. Black-bellied whistling duck  --  https://en.wikipedia.org/wiki/Black-bellied_whistling_duck
+3. Fulvous whistling duck  --  https://en.wikipedia.org/wiki/Fulvous_whistling_duck
+4. Snow goose  --  https://en.wikipedia.org/wiki/Snow_goose
+5. Ross's goose  --  https://en.wikipedia.org/wiki/Ross%27s_goose
+6. Greater white-fronted goose  --  https://en.wikipedia.org/wiki/Greater_white-fronted_goose
+7. Pink-footed goose  --  https://en.wikipedia.org/wiki/Pink-footed_goose
+8. Brant (goose)  --  https://en.wikipedia.org/wiki/Brant_(goose)
+9. Barnacle goose  --  https://en.wikipedia.org/wiki/Barnacle_goose
+10. Cackling goose  --  https://en.wikipedia.org/wiki/Cackling_goose
+11. Canada goose  --  https://en.wikipedia.org/wiki/Canada_goose
+12. Mute swan  --  https://en.wikipedia.org/wiki/Mute_swan
+13. Trumpeter swan  --  https://en.wikipedia.org/wiki/Trumpeter_swan
+14. Tundra swan  --  https://en.wikipedia.org/wiki/Tundra_swan
+15. Wood duck  --  https://en.wikipedia.org/wiki/Wood_duck
+-}
+
+-- Link: https://macoutreach.rocks/share/78dfe815
+
 -- your assignment:
 --   make an app for your favourite type of animal or plant, like "birds" or "native Canadian prickly bushes"
 --   your app's navigation bar must:
@@ -13,8 +33,6 @@
 --          1% - accordian appears and has the right content
 --          maximum 4% (so you can make some mistakes)
  
- 
- 
 import Bootstrap.Form.Input as Input 
 import Html.Events as Events
 import Bootstrap.Carousel as Carousel
@@ -25,10 +43,10 @@ import Bootstrap.Card.Block as Block
 
 --this appears at the top of the browser screen (or on the tab)
 title : String
-title = "Seasame Street Confidential"
+title = "Birds of Ontario"
  
 -- list of 15 most popular Ontario birds with name (common name, and scientific name) , url, and image
-birds : List ((String, String), String, String)
+birds : BirdsList
 birds = [ (("Common loon","Gavia immer"),"https://en.wikipedia.org/wiki/Common_loon","https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg/220px-Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg")
         , (("Black-bellied whistling duck","Dendrocygna autumnalis"),"https://en.wikipedia.org/wiki/Black-bellied_whistling_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Whistling_duck_flight02_-_natures_pics-edit1.jpg/220px-Whistling_duck_flight02_-_natures_pics-edit1.jpg")
         , (("Fulvous whistling duck","Dendrocygna bicolor"),"https://en.wikipedia.org/wiki/Fulvous_whistling_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Dendrocygna_bicolor_wilhelma.jpg/220px-Dendrocygna_bicolor_wilhelma.jpg")
@@ -45,26 +63,35 @@ birds = [ (("Common loon","Gavia immer"),"https://en.wikipedia.org/wiki/Common_l
         , (("Tundra swan","Cygnus columbianus"),"https://en.wikipedia.org/wiki/Tundra_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Cygnus_bewickii_01.jpg/220px-Cygnus_bewickii_01.jpg")
         , (("Wood duck","Aix sponsa"),"https://en.wikipedia.org/wiki/Wood_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wood_Duck_%28Aix_sponsa%29%2C_Parc_du_Rouge-Clo%C3%AEtre%2C_Brussels.jpg/220px-Wood_Duck_%28Aix_sponsa%29%2C_Parc_du_Rouge-Clo%C3%AEtre%2C_Brussels.jpg") ]
 
-
+-- filter the birds list to keep only birds with names/species
+-- that match least 1 word in search string
+birdsOnSearch : Model -> BirdsList
+birdsOnSearch model =
+  birds |> List.filter (\((birdName,birdSpecies),_,_) ->  
+             model.searchList |> List.any (\ wrd -> 
+                                   (commonWrds wrd) && (
+                                   ((String.toLower) birdName |> String.contains (String.toLower wrd)) ||
+                                   ((String.toLower) birdSpecies |> String.contains (String.toLower wrd)) )))
+               
+-- carousel below search bar
+carousel1 : Model -> Html Msg
 carousel1 model =
   Carousel.config CarouselMsg  []
     |> Carousel.withControls
     |> Carousel.withIndicators
     |> Carousel.slides
        (birds |> List.map (\((birdName,birdSpecies),birdUrl,birdImage) ->             
-                Slide.config [] (Slide.image [height 300] birdImage)
-                    |> Slide.caption []
-                        [ Html.h4 [] [Html.text birdName]
-                        , Html.p [] [Html.text "Subtitle for slide 1"]
-                        ])  
+                Slide.config [ ] (Slide.image [] birdImage))  
        )
     |> Carousel.view model.carousel1State
    
+-- accordion of search results
+accordion1 : Model -> Html Msg
 accordion1 model =
   Accordion.config AccordionMsg
     |> Accordion.withAnimation
     |> Accordion.cards
-        (birds |> List.map (\((birdName,birdSpecies),birdUrl,birdImage) ->
+        (birdsOnSearch model |> List.map (\((birdName,birdSpecies),birdUrl,birdImage) ->
                       Accordion.card
                           { id = birdName
                           , options = [ Card.outlineSuccess, Card.align Text.alignXsCenter ]
@@ -73,16 +100,19 @@ accordion1 model =
                                   (Accordion.toggle [] [ Html.text birdName ])
                           , blocks =
                               [ Accordion.block [ Block.align Text.alignXsLeft ]
-                                  [ Block.titleH4 [] [ Html.text birdSpecies ]
-                                  , Block.text [] [ Html.text "Lorem ipsum etc" ] ]
+                                  [ Block.titleH4 [] [ Html.text ("Scientific name: " ++ birdSpecies) ]
+                                  , Block.link [ href birdUrl 
+                                               , target "_blank"] [ Html.text ("Wikipedia link: The " ++ birdName) ] ]
                               ]
-                          })
-        )
+                          }
+                                          )
+          )
     |> Accordion.view model.accordion1State
     
+blankLine : Html Msg
 blankLine = Grid.row [] --this is an empty row (to add blank space)
               [ Grid.col []
-                  [ Html.h6[Spacing.my3][] --change spacing number to make empty row bigger or smaller (0-5)
+                  [ Html.h6 [Spacing.my3] [] --change spacing number to make empty row bigger or smaller (0-5)
                   ]
               ]
  
@@ -94,23 +124,29 @@ page model =
             |> Navbar.collapseMedium            -- Collapse menu at the medium breakpoint
             |> Navbar.info                      -- Customize coloring
             |> Navbar.brand                     -- Add logo to your brand with a little styling to align nicely
-                [ href "#" ]
+                [ href "https://en.wikipedia.org/wiki/Gull" 
+                , target "_blank"]
                 [ Html.img
-                    [ src "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Sesame_Street_logo.svg/1024px-Sesame_Street_logo.svg.png"
+                    [ src "https://b.kisscc0.com/20180705/lzq/kisscc0-seabird-beak-gulls-drawing-bird-over-the-sea-5b3e5368e61136.2949116715308112409424.png"
                     , class "d-inline-block align-top"
-                    , style  "width" "120px" 
+                    , style  "width" "50px" 
                     ]
                     []
                 ]
             |> Navbar.items
                 [ Navbar.itemLink
-                    [ href "#" ] [ Html.text "Seasame Street Confidential" ]
+                    [ href "https://en.wikipedia.org/wiki/List_of_birds_by_flight_speed"  
+                    , target "_blank"] [ Html.text "Fastest Avian Birds" ]
+                , Navbar.itemLink
+                    [ href "https://en.wikipedia.org/wiki/List_of_largest_birds"  
+                    , target "_blank"] [ Html.text "Birds by Size" ]
                 , Navbar.dropdown        
                     { id = "mydropdown"
-                    , toggle = Navbar.dropdownToggle [] [ Html.text "Birds" ]
+                    , toggle = Navbar.dropdownToggle [] [ Html.text "Popular Ontario Birds" ]
                     , items =
                         List.map  ( \ ((birdName,_),url,_) -> Navbar.dropdownItem
-                                      [ href url ]
+                                      [ href url  
+                                      , target "_blank"]
                                       [ birdName |> Html.text ]
                                   )
                                ( birds )
@@ -118,33 +154,26 @@ page model =
                 ]
             |> Navbar.customItems
                 [ Navbar.formItem []
-                    [ Input.text [ Input.attrs [placeholder "character search", value model.searchString, Events.onInput UpdateSearch ]]
-                    ]
+                    [ Input.text [ Input.attrs [placeholder "search birds", value model.searchString, Events.onInput UpdateSearch ]]
+                    , Button.button
+                      [ Button.success
+                      , Button.attrs [ Spacing.ml2Sm ]
+                      ]
+                      [ Html.text "Search"]]
                 ]
             |> Navbar.view model.navbarState
+                
         ]
-     --HEADER
-    , Html.text model.searchString
+    -- display carousel and accordion if search is non empty
+    , blankLine
     , case model.searchString of
-        --"" -> Html.div [] [] 
-        _ -> Grid.container [] [ carousel1 model
-                               , accordion1 model]
-    , Html.div [] []
-    , model.accordion1State |> Debug.toString |> Html.text 
-    , Html.div [] []
-    ] 
-    ++
-    ( List.map (\ wrd -> Html.text (wrd ++ ", ")) model.searchList )
- 
-{- The number of accordions, carousels and pop ups.
-   To add more than one of each, you must increase these numbers and then make sure to
-   put the correct id in the code where you add it. The ids start at 0 and go up from there
-   (0, 1, 2, 3, etc.)
--}
-numAccordions = 1
-numCarousels = 2
+        "" -> blankLine 
+        _ -> Grid.container [] [ 
+                                Grid.container [ style "height" "30"] [carousel1 model ]
+                                , accordion1 model]
+    ]
+
 numPopUps = 1
- 
  
 type alias Model =
     { navKey : Navigation.Key
@@ -158,6 +187,9 @@ type alias Model =
     , searchList : List String
     }
  
+type alias BirdsList =
+    List ((String, String), String, String)
+    
 type Page
     = Home
     | NotFound
@@ -195,8 +227,6 @@ init flags url key =
                           }
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
- 
- 
  
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -266,8 +296,10 @@ update msg model =
                                 --, menuState = Closed
                         }, Cmd.none )
  
+filterChars : Char -> Bool
 filterChars char = if Char.isLower char || Char.isUpper char || Char.isDigit char || char == ' ' then True else False
  
+commonWrds : String -> Bool
 commonWrds wrd = case wrd of
                   "the" -> False
                   "best" -> False
@@ -294,6 +326,7 @@ commonWrds wrd = case wrd of
                   "elementary" -> False
                   "secondary" -> False
                   "district" -> False
+                  " " -> False
                   "" -> False
                   _ -> True
  

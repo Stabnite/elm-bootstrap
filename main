@@ -1,5 +1,4 @@
-{-              GROUP 5       
-   BIRDS:
+{- BIRDS:
 1. Common loon  --  https://en.wikipedia.org/wiki/Common_loon
 2. Black-bellied whistling duck  --  https://en.wikipedia.org/wiki/Black-bellied_whistling_duck
 3. Fulvous whistling duck  --  https://en.wikipedia.org/wiki/Fulvous_whistling_duck
@@ -17,7 +16,7 @@
 15. Wood duck  --  https://en.wikipedia.org/wiki/Wood_duck
 -}
 
--- Link: https://macoutreach.rocks/share/78dfe815
+-- Link: https://macoutreach.rocks/share/38c322ac
 
 -- your assignment:
 --   make an app for your favourite type of animal or plant, like "birds" or "native Canadian prickly bushes"
@@ -35,11 +34,7 @@
  
 import Bootstrap.Form.Input as Input 
 import Html.Events as Events
-import Bootstrap.Carousel as Carousel
-import Bootstrap.Carousel.Slide as Slide
-import Bootstrap.Accordion as Accordion
 import Bootstrap.Card as Card
-import Bootstrap.Card.Block as Block
 
 --this appears at the top of the browser screen (or on the tab)
 title : String
@@ -47,24 +42,24 @@ title = "Birds of Ontario"
  
 -- list of 15 most popular Ontario birds with name (common name, and scientific name) , url, and image
 birds : BirdsList
-birds = [ (("Common loon","Gavia immer"),"https://en.wikipedia.org/wiki/Common_loon","https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg/220px-Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg")
+birds = [ (("Common loon","Gavia immer")                            ,"https://en.wikipedia.org/wiki/Common_loon","https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg/220px-Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg")
         , (("Black-bellied whistling duck","Dendrocygna autumnalis"),"https://en.wikipedia.org/wiki/Black-bellied_whistling_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Whistling_duck_flight02_-_natures_pics-edit1.jpg/220px-Whistling_duck_flight02_-_natures_pics-edit1.jpg")
-        , (("Fulvous whistling duck","Dendrocygna bicolor"),"https://en.wikipedia.org/wiki/Fulvous_whistling_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Dendrocygna_bicolor_wilhelma.jpg/220px-Dendrocygna_bicolor_wilhelma.jpg")
-        , (("Snow goose","Anser caerulescens"),"https://en.wikipedia.org/wiki/Snow_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Snow_goose_in_Central_Park_%2833138%29.jpg/220px-Snow_goose_in_Central_Park_%2833138%29.jpg")
-        , (("Ross's goose","Anser rossii"),"https://en.wikipedia.org/wiki/Ross%27s_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Ross%27s_Goose_%28Chen_rossii%29_%2823321411711%29.jpg/220px-Ross%27s_Goose_%28Chen_rossii%29_%2823321411711%29.jpg")
-        , (("Greater white-fronted goose","Anser albifrons"),"https://en.wikipedia.org/wiki/Greater_white-fronted_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Greater_white-fronted_goose_%28cropped%29.jpg/220px-Greater_white-fronted_goose_%28cropped%29.jpg")
-        , (("Pink-footed goose","(Anser brachyrhynchus"),"https://en.wikipedia.org/wiki/Pink-footed_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Anser_brachyrhynchus.jpg/220px-Anser_brachyrhynchus.jpg")
-        , (("Brant (goose)","Branta bernicla"),"https://en.wikipedia.org/wiki/Brant_(goose)","https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Brent_Goose.jpg/220px-Brent_Goose.jpg")
-        , (("Barnacle goose","Branta leucopsis"),"https://en.wikipedia.org/wiki/Barnacle_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Barnacle-Goose.jpg/220px-Barnacle-Goose.jpg")
-        , (("Cackling goose","Branta hutchinsii"),"https://en.wikipedia.org/wiki/Cackling_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/AleutianCanadaGoose2.jpg/220px-AleutianCanadaGoose2.jpg")
-        , (("Canada goose","Branta canadensis"),"https://en.wikipedia.org/wiki/Canada_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Canada_goose_on_Seedskadee_NWR_%2827826185489%29.jpg/220px-Canada_goose_on_Seedskadee_NWR_%2827826185489%29.jpg")
-        , (("Mute swan","Cygnus olor"),"https://en.wikipedia.org/wiki/Mute_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Mute_swan_Vrhnika.jpg/220px-Mute_swan_Vrhnika.jpg")
-        , (("Trumpeter swan","Cygnus buccinator"),"https://en.wikipedia.org/wiki/Trumpeter_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Trumpeter_swans_in_winter.jpg/220px-Trumpeter_swans_in_winter.jpg")
-        , (("Tundra swan","Cygnus columbianus"),"https://en.wikipedia.org/wiki/Tundra_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Cygnus_bewickii_01.jpg/220px-Cygnus_bewickii_01.jpg")
-        , (("Wood duck","Aix sponsa"),"https://en.wikipedia.org/wiki/Wood_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wood_Duck_%28Aix_sponsa%29%2C_Parc_du_Rouge-Clo%C3%AEtre%2C_Brussels.jpg/220px-Wood_Duck_%28Aix_sponsa%29%2C_Parc_du_Rouge-Clo%C3%AEtre%2C_Brussels.jpg") ]
+        , (("Fulvous whistling duck","Dendrocygna bicolor")         ,"https://en.wikipedia.org/wiki/Fulvous_whistling_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Dendrocygna_bicolor_wilhelma.jpg/220px-Dendrocygna_bicolor_wilhelma.jpg")
+        , (("Snow goose","Anser caerulescens")                      ,"https://en.wikipedia.org/wiki/Snow_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Snow_goose_in_Central_Park_%2833138%29.jpg/220px-Snow_goose_in_Central_Park_%2833138%29.jpg")
+        , (("Ross's goose","Anser rossii")                          ,"https://en.wikipedia.org/wiki/Ross%27s_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Ross%27s_Goose_%28Chen_rossii%29_%2823321411711%29.jpg/220px-Ross%27s_Goose_%28Chen_rossii%29_%2823321411711%29.jpg")
+        , (("Greater white-fronted goose","Anser albifrons")        ,"https://en.wikipedia.org/wiki/Greater_white-fronted_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Greater_white-fronted_goose_%28cropped%29.jpg/220px-Greater_white-fronted_goose_%28cropped%29.jpg")
+        , (("Pink-footed goose","Anser brachyrhynchus")             ,"https://en.wikipedia.org/wiki/Pink-footed_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Anser_brachyrhynchus.jpg/220px-Anser_brachyrhynchus.jpg")
+        , (("Brant (goose)","Branta bernicla")                      ,"https://en.wikipedia.org/wiki/Brant_(goose)","https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Brent_Goose.jpg/220px-Brent_Goose.jpg")
+        , (("Barnacle goose","Branta leucopsis")                    ,"https://en.wikipedia.org/wiki/Barnacle_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Barnacle-Goose.jpg/220px-Barnacle-Goose.jpg")
+        , (("Cackling goose","Branta hutchinsii")                   ,"https://en.wikipedia.org/wiki/Cackling_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/AleutianCanadaGoose2.jpg/220px-AleutianCanadaGoose2.jpg")
+        , (("Canada goose","Branta canadensis")                     ,"https://en.wikipedia.org/wiki/Canada_goose","https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Canada_goose_on_Seedskadee_NWR_%2827826185489%29.jpg/220px-Canada_goose_on_Seedskadee_NWR_%2827826185489%29.jpg")
+        , (("Mute swan","Cygnus olor")                              ,"https://en.wikipedia.org/wiki/Mute_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Mute_swan_Vrhnika.jpg/220px-Mute_swan_Vrhnika.jpg")
+        , (("Trumpeter swan","Cygnus buccinator")                   ,"https://en.wikipedia.org/wiki/Trumpeter_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Trumpeter_swans_in_winter.jpg/220px-Trumpeter_swans_in_winter.jpg")
+        , (("Tundra swan","Cygnus columbianus")                     ,"https://en.wikipedia.org/wiki/Tundra_swan","https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Cygnus_bewickii_01.jpg/220px-Cygnus_bewickii_01.jpg")
+        , (("Wood duck","Aix sponsa")                               ,"https://en.wikipedia.org/wiki/Wood_duck","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wood_Duck_%28Aix_sponsa%29%2C_Parc_du_Rouge-Clo%C3%AEtre%2C_Brussels.jpg/220px-Wood_Duck_%28Aix_sponsa%29%2C_Parc_du_Rouge-Clo%C3%AEtre%2C_Brussels.jpg") ]
 
--- filter the birds list to keep only birds with names/species
--- that match least 1 word in search string
+-- search-updated birds list, filtered to keep only birds with at least 
+-- a part of their name partially/fully matched by a work in search list
 birdsOnSearch : Model -> BirdsList
 birdsOnSearch model =
   birds |> List.filter (\((birdName,birdSpecies),_,_) ->  
@@ -77,11 +72,14 @@ birdsOnSearch model =
 carousel1 : Model -> Html Msg
 carousel1 model =
   Carousel.config CarouselMsg  []
-    |> Carousel.withControls
     |> Carousel.withIndicators
     |> Carousel.slides
        (birds |> List.map (\((birdName,birdSpecies),birdUrl,birdImage) ->             
-                Slide.config [ ] (Slide.image [] birdImage))  
+                Slide.config [class "bg-secondary"] (image "250px" birdImage)
+                  |> Slide.caption [  ]
+                    [ Html.h2 [class "font-weight-bold text-white fixed-top"] [ Html.text birdName ] 
+                    , Html.div [class "font-weight-bold "] [Html.text birdSpecies ]
+                    ])  
        )
     |> Carousel.view model.carousel1State
    
@@ -130,8 +128,7 @@ page model =
                     [ src "https://b.kisscc0.com/20180705/lzq/kisscc0-seabird-beak-gulls-drawing-bird-over-the-sea-5b3e5368e61136.2949116715308112409424.png"
                     , class "d-inline-block align-top"
                     , style  "width" "50px" 
-                    ]
-                    []
+                    ] []
                 ]
             |> Navbar.items
                 [ Navbar.itemLink
@@ -153,7 +150,7 @@ page model =
                     }
                 ]
             |> Navbar.customItems
-                [ Navbar.formItem []
+                [ Navbar.formItem [ class "fixed-right" ]
                     [ Input.text [ Input.attrs [placeholder "search birds", value model.searchString, Events.onInput UpdateSearch ]]
                     , Button.button
                       [ Button.success
@@ -168,8 +165,7 @@ page model =
     , blankLine
     , case model.searchString of
         "" -> blankLine 
-        _ -> Grid.container [] [ 
-                                Grid.container [ style "height" "30"] [carousel1 model ]
+        _ -> Grid.container [] [Grid.container [ Spacing.my3] [carousel1 model ]
                                 , accordion1 model]
     ]
 
@@ -193,7 +189,6 @@ type alias BirdsList =
 type Page
     = Home
     | NotFound
- 
  
 type Msg
     = UrlChange Url
@@ -334,7 +329,6 @@ resetViewport : Cmd Msg
 resetViewport =
   Task.perform (\_ -> NoOp) (Dom.setViewport 0 0)
  
- 
 urlUpdate : Url -> Model -> ( Model, Cmd Msg )
 urlUpdate url model =
     case decode url of
@@ -354,7 +348,6 @@ routeParser =
     UrlParser.oneOf
         [ UrlParser.map Home top
         ]
- 
  
 view : Model -> Browser.Document Msg
 view model =
@@ -383,12 +376,10 @@ mainContent model =
  
             NotFound ->
                 pageNotFound
- 
+
  
 pageNotFound : List (Html Msg)
 pageNotFound =
     [ Html.h1 [Spacing.my4] [ Html.text "Not found" ]
     , Html.text "Sorry, couldn't find that page"
     ]
- 
- 

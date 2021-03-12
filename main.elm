@@ -1,3 +1,5 @@
+                                             ---== GROUP 5 ==---
+
 {- BIRDS:
 1. Common loon  --  https://en.wikipedia.org/wiki/Common_loon
 2. Black-bellied whistling duck  --  https://en.wikipedia.org/wiki/Black-bellied_whistling_duck
@@ -16,22 +18,8 @@
 15. Wood duck  --  https://en.wikipedia.org/wiki/Wood_duck
 -}
 
--- Link: https://macoutreach.rocks/share/38c322ac
+-- Link: https://macoutreach.rocks/share/526f19a7
 
--- your assignment:
---   make an app for your favourite type of animal or plant, like "birds" or "native Canadian prickly bushes"
---   your app's navigation bar must:
---     1. have a drop-down relevant to the topic, which opens a page on that topic, e.g., aquatic birds with a list of links
---     2. have two menu bar items which don't have to do anything
---     3. have a search field, which when non-empty causes a carousel with (creative-commons-licensed) images to be displayed, and underneath that an accordian made up of search results
---   you must have at least 10 species, which you should list above your share link and code in the avenue submission
---   Marks: 1% - working drop-down
---          1% - search field causes update
---          1% - search field updates properly (ie "b ern" give "Big Bird", "Bert", "Ernie", "ber" -> ["Bert"])
---          1% - carosel works and has the right content
---          1% - accordian appears and has the right content
---          maximum 4% (so you can make some mistakes)
- 
 import Bootstrap.Form.Input as Input 
 import Html.Events as Events
 import Bootstrap.Card as Card
@@ -164,9 +152,11 @@ page model =
     -- display carousel and accordion if search is non empty
     , blankLine
     , case model.searchString of
-        "" -> blankLine 
-        _ -> Grid.container [] [Grid.container [ Spacing.my3] [carousel1 model ]
-                                , accordion1 model]
+        "" -> Grid.container [] [ Html.text "Welcome. Use the search function to start" ]
+        _ -> Grid.container [] [Grid.container [ Spacing.my3] [ carousel1 model
+                                                              , blankLine
+                                                              , accordion1 model]
+                                ]
     ]
 
 numPopUps = 1
@@ -232,7 +222,6 @@ subscriptions model =
               , onAnimationFrame ( \ posix -> Tick ((Time.posixToMillis posix |> toFloat) * 0.001) )
               ]
  
- 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -255,19 +244,16 @@ update msg model =
  
         NoOp -> (model, Cmd.none)
  
-        --ADD ACCORDION
         AccordionMsg state ->
             ( { model | accordion1State = state }
             , Cmd.none
             )
  
-        --ADD CAROUSEL
         CarouselMsg subMsg ->
             ( { model | carousel1State = Carousel.update subMsg model.carousel1State }
             , Cmd.none
             )
  
-        --ADD MODAL
         CloseModal id ->
             ( { model | modalVisibilities = Dict.insert id Modal.hidden model.modalVisibilities } , Cmd.none )
  
@@ -285,11 +271,7 @@ update msg model =
                         in
                         ({ model | searchString = searchString
                                  , searchList = searchList
-                                --, searching = True
-                                --, searchBeginT = if model.searching then model.searchBeginT else model.t
-                                --, searchContinuesT = model.t
-                                --, menuState = Closed
-                        }, Cmd.none )
+                         }, Cmd.none )
  
 filterChars : Char -> Bool
 filterChars char = if Char.isLower char || Char.isUpper char || Char.isDigit char || char == ' ' then True else False
